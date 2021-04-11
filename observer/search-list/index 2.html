@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Card</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section id="app" class="card" :class="[adaptive, { loader:loading }]">
+        <div class="view">
+            <div class="view__ads">Реклама</div>
+            <a href="#" class="view__link">
+                <img class="view__image"
+                    :src="product.imageUrl"
+                    :alt="product.name" />
+            </a>
+        </div>
+
+        <a :href="product.url" class="title">
+            {{ product.name }}
+        </a>
+
+        <div class="info">
+            <div class="rating" :class="`rating--${product.rating}`"></div>
+            <p>
+                Действующее вещество (МНН):
+                <span>{{ product.mnn }}</span>
+            </p>
+            <p>
+                Производитель:
+                <span>{{ product.prod }}</span>
+            </p>
+        </div>
+
+        <div class="values">
+            <div class="rating" :class="`rating--${product.rating}`"></div>
+
+            <div class="price">
+                <div class="price__current">
+                    {{ product.price }} <span class="rub">Р</span>
+                </div>
+                <div class="price__available" v-if="product.state">
+                    В наличии
+                </div>
+            </div>
+
+            <button class="favorite" type="button">
+                <span class="heart"></span>
+                <span>В избранное</span>
+            </button>
+
+            <div class="range">
+                <button class="range__button-minus" type="button">
+                    -
+                </button>
+                <input class="range__input-number" type="number" min="1" max="99" value="1" />
+                <button class="range__button-plus" type="button">
+                    +
+                </button>
+            </div>
+
+            <div class="actions">
+                <button class="button button--outline" type="button">
+                    Быстрый заказ
+                </button>
+                <button class="button" type="button" @click="sendEvent('addToBasket')">В корзину</button>
+            </div>
+        </div>
+
+        <div class="receiving">
+            <p>
+                <i class="icon icon--delivery-self"></i>
+                Самовывоз {{ product.selfDelivery }}
+            </p>
+            <p>
+                <i class="icon icon--delivery"></i>
+                {{ product.delivery }}
+            </p>
+            <p>
+                <i class="icon icon--soon"></i>
+                {{ product.receivingTime }}
+            </p>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    medCode: '%MED_CODE%',
+                    loading: true,
+                    outsize: parent.window.innerWidth,
+
+                    product: {
+                        medCode: null,
+                        idProduct: null,
+                        imageUrl: null,
+                        urlProduct: null,
+                        analogUrl: "",
+                        name: "Название препарата",
+                        price: "Цена товара",
+                        mnn: "описание",
+                        prod: "имя производителя",
+                        rating: 4,
+                        selfDelivery: "25.03.2021",
+                        delivery: "Доставка курьером сегодня",
+                        receivingTime: "Забрать в аптеке через час",
+                        text: "Имеются противопоказания… и т.д.",
+                        state: "В наличии"
+                    }
+                }
+            },
+
+            computed: {
+                adaptive() {
+                    return {
+                        'md': this.outsize <= 1289 && this.outsize >= 1024,
+                        'sm': this.outsize <= 1023 && this.outsize >= 768,
+                        'xs': this.outsize <= 768,
+                    }
+                }
+            },
+
+            methods: {
+                sendEvent(event, message = '') {
+                    window.parent.postMessage('adserver::message' + JSON.stringify({ event, message }), '*')
+                },
+
+                messageEvent(event) {
+                    if (typeof event.data === 'string' && event.data.startsWith('adserver::message')) {
+                        const data = JSON.parse(event.data.replace(/^adserver::message/g, ''));
+                        console.log(data);
+                    }
+                },
+
+                resizeEvent() {
+                    this.outsize = parent.window.innerWidth;
+                },
+
+                fetchData() {
+                    if (String(this.medCode).includes('MED_CODE')) {
+                         return false
+                    }
+
+                    const self = this;
+                    this.loading = true;
+                    fetch('https://6d2dcbb6-8412-4559-bdb0-ff482a798ec4.mock.pstmn.io/get-medcode-info/' + this.medCode)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+                            console.log(data);
+                            return self.product = data;
+                        })
+                        .finally(function() {
+                            self.loading = false
+                        })
+                }
+            },
+
+            created() {
+                this.fetchData();
+
+                window.addEventListener('message', this.messageEvent)
+                parent.window.addEventListener('resize', this.resizeEvent)
+
+                this.$once('hook:destroy', () => {
+                    window.removeEventListener('message', this.messageEvent);
+                    parent.window.removeEventListener('message', this.messageEvent)
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

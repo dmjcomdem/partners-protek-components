@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 40 40">
+    <style>
+        :root {
+            --primary: #0067B1;
+        }
+
+        path {
+            opacity: 0.2;
+            animation: fade 1.6s infinite;
+            animation-delay: calc(0.13s * (12 - (var(--index))));
+        }
+
+        @keyframes fade {
+            from { opacity: 1; }
+            to { opacity: 0.2; }
+        }
+    </style>
+    <g clip-path="url(#clip0)">
+        <path style="--index: 1" fill="var(--primary)" d="M34.7 9.3a2 2 0 012.7.7c.5.9.1 2-.8 2.6A2 2 0 0134 12a2 2 0 01.7-2.6z" />
+        <path style="--index: 2" fill="var(--primary)" d="M27.4 3.4a2 2 0 012.6-.8 2 2 0 01.7 2.7 2 2 0 01-2.6.7 2 2 0 01-.7-2.6z" />
+        <path style="--index: 3" fill="var(--primary)" d="M20 3.9A2 2 0 1020 0a2 2 0 000 3.9z" />
+        <path style="--index: 4" fill="var(--primary)" d="M11 6.3a2 2 0 100-4 2 2 0 000 4z" />
+        <path style="--index: 5" fill="var(--primary)" d="M5.3 9.3a2 2 0 01.7 2.6 2 2 0 01-2.6.7 2 2 0 01-.8-2.6 2 2 0 012.7-.7z" />
+        <path style="--index: 6" fill="var(--primary)" d="M2 22a2 2 0 100-4 2 2 0 000 4z" />
+        <path style="--index: 7" fill="var(--primary)" d="M3.4 27.4A2 2 0 016 28c.5.9.2 2-.7 2.6a2 2 0 01-2.7-.7c-.5-.9-.1-2 .8-2.6z" />
+        <path style="--index: 8" fill="var(--primary)" d="M9.3 34.7a2 2 0 012.6-.7 2 2 0 01.7 2.6 2 2 0 01-2.6.8 2 2 0 01-.7-2.7z" />
+        <path style="--index: 9" fill="var(--primary)" d="M20 40a2 2 0 100-3.9 2 2 0 000 3.9z" />
+        <path style="--index: 10" fill="var(--primary)" d="M30.7 33.7c.5 1 .2 2-.7 2.7a2 2 0 01-2.6-.8A2 2 0 0128 33a2 2 0 012.6.7z" />
+        <path style="--index: 11" fill="var(--primary)" d="M36.6 27.4a2 2 0 01.8 2.6 2 2 0 01-2.7.7 2 2 0 01-.7-2.6 2 2 0 012.6-.7z" />
+        <path style="--index: 12" fill="var(--primary)" d="M38 22a2 2 0 100-4 2 2 0 000 4z" />
+    </g>
+    <defs>
+        <clipPath id="clip0">
+            <path fill="#fff" d="M0 0h40v40H0z" />
+        </clipPath>
+    </defs>
+</svg>

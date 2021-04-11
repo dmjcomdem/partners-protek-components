@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>ЦВ Протек ~ Test ~ </title>
+</head>
+<body>
+<div id="tags"></div>
+</body>
+<script>
+    var url = '/api/adserver/placements-tag';
+    fetch(url).then((data) => {
+        return data.json();
+    }).then((data) => {
+        let htmlTags = '';
+        for (let i = 0; i < data.length; i++) {
+            htmlTags += data[i];
+        }
+        let tags = document.getElementById('tags')
+        tags.innerHTML = htmlTags;
+
+        let s = document.createElement("script");
+        s.setAttribute("src", "https://cdn.iae.one/js/show.js");
+        document.body.appendChild(s);
+    });
+
+</script>
+
+</html>
